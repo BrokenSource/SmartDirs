@@ -1,14 +1,17 @@
 [project]
 name        = "smartdirs"
-description = "📂 Better Platform Directories"
+description = "📂 System Directories and Utilities "
 authors     = [{name="Tremeschin"}]
-version     = "0.0.1"
+version     = "0.1.0"
 readme      = "readme.md"
 license     = "MIT"
 requires-python = ">=3.10"
 dependencies = [
     "attrs",
 ]
+
+[project.urls]
+GitHub = "https://github.com/BrokenSource/SmartDirs"
 
 [build-system]
 requires = ["hatchling"]
