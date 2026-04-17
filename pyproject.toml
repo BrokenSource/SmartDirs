@@ -1,6 +1,6 @@
 [project]
 name        = "smartdirs"
-description = "📂 System Directories and Utilities "
+description = "📂 System Directories and Utilities"
 authors     = [{name="Tremeschin"}]
 version     = "0.1.0"
 readme      = "readme.md"

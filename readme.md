@@ -20,7 +20,7 @@ from smartdirs import Path, SmartDirs
 
 dirs = SmartDirs(
     package=Path(__file__),
-    name=__package__,
+    name=str(__package__),
 )
 ```
 
