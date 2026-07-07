@@ -1,10 +1,9 @@
 [project]
 name        = "smartdirs"
 description = "📂 System Directories and Utilities"
-authors     = [{name="Tremeschin"}]
 version     = "0.1.0"
-readme      = "readme.md"
 license     = "MIT"
+readme      = "readme.md"
 requires-python = ">=3.10"
 dependencies = [
     "attrs",
