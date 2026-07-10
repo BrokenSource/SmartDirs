@@ -1,14 +1,16 @@
 import os
 from pathlib import Path
 
-from pydantic import computed_field
+from pydantic import Field, computed_field
 
 from smartdirs import WORKSPACE
 from smartdirs.base import SmartDirsBase
 
 
 class SmartDirsWorkspace(SmartDirsBase):
-    root: Path = Path(os.environ["WORKSPACE"])
+    root: Path = Field(default_factory=lambda:
+        Path(os.environ[WORKSPACE])
+    )
 
     @computed_field
     def base_home(self) -> Path:
@@ -17,3 +19,7 @@ class SmartDirsWorkspace(SmartDirsBase):
     @computed_field
     def base_cache(self) -> Path:
         return self.root.joinpath("cache")
+
+    @computed_field
+    def base_config(self) -> Path:
+        return self.root.joinpath("config")

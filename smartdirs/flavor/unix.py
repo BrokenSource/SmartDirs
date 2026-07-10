@@ -18,3 +18,10 @@ class SmartDirsUnix(SmartDirsBase):
             key="XDG_CACHE_HOME",
             default=Path.home().joinpath(".cache"),
         ))
+
+    @computed_field
+    def base_config(self) -> Path:
+        return Path(os.environ.get(
+            key="XDG_CONFIG_HOME",
+            default=Path.home().joinpath(".config"),
+        ))

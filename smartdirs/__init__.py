@@ -5,18 +5,24 @@ from pathlib import Path
 WORKSPACE: str = "WORKSPACE"
 """Variable for setting a common directories root"""
 
+from smartdirs.base import SmartDirsBase
+from smartdirs.flavor.macos import SmartDirsMacOS
+from smartdirs.flavor.unix import SmartDirsUnix
+from smartdirs.flavor.windows import SmartDirsWindows
+from smartdirs.flavor.workspace import SmartDirsWorkspace
+
 # Global dispatch branch on flavors
 if os.environ.get(WORKSPACE, None):
-    from smartdirs.at.workspace import SmartDirsWorkspace as SmartDirs
+    SmartDirs = SmartDirsWorkspace
 
 elif os.name == "posix":
-    from smartdirs.at.unix import SmartDirsUnix as SmartDirs
+    SmartDirs = SmartDirsUnix
 
 elif sys.platform.startswith("darwin"):
-    from smartdirs.at.macos import SmartDirsMacOS as SmartDirs
+    SmartDirs = SmartDirsMacOS
 
 elif sys.platform.startswith("win"):
-    from smartdirs.at.windows import SmartDirsWindows as SmartDirs
+    SmartDirs = SmartDirsWindows
 
 else:
     raise NotImplementedError((

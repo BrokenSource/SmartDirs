@@ -8,7 +8,7 @@ class UserOptions(BaseModel):
     ...
 
 
-class SmartDirsBase(ABC, BaseModel):
+class SmartDirsBase(BaseModel, ABC):
     """Nice platform directories and utilities class"""
 
     package: Path
