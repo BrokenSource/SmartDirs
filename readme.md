@@ -24,8 +24,10 @@ A modular platform directories package with conveniences:
 from smartdirs import Path, SmartDirs
 
 dirs = SmartDirs(
-    package=Path(__file__).parent,
-    name=str(__package__),
+    pkg=Path(__file__).parent,
+    app=str(__package__),
+    org="author",
+    url="com",
 )
 ```
 

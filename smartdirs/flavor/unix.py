@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 
+from pydantic import model_serializer
+
 from smartdirs.base import SmartDirsBase
 
 
@@ -39,6 +41,3 @@ class SmartDirsUnix(SmartDirsBase):
 
     def app_subdir(self) -> Path:
         return Path(self.app)
-
-    def app_runtime(self) -> Path:
-        return self.base_runtime().joinpath(self.app_subdir())

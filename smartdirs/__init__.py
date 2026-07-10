@@ -7,7 +7,7 @@ WORKSPACE: str = "WORKSPACE"
 
 # Warn: Use base class for isinstance() checks!
 from smartdirs.base import SmartDirsBase
-from smartdirs.flavor.macos import SmartDirsMacOS
+from smartdirs.flavor.darwin import SmartDirsDarwin
 from smartdirs.flavor.unix import SmartDirsUnix
 from smartdirs.flavor.windows import SmartDirsWindows
 from smartdirs.flavor.workspace import SmartDirsWorkspace
@@ -20,7 +20,7 @@ elif os.name == "posix":
     SmartDirs = SmartDirsUnix
 
 elif sys.platform.startswith("darwin"):
-    SmartDirs = SmartDirsMacOS
+    SmartDirs = SmartDirsDarwin
 
 elif sys.platform.startswith("win"):
     SmartDirs = SmartDirsWindows
@@ -31,8 +31,9 @@ else:
     ))
 
 dirs = SmartDirs(
-    package=Path(__file__).parent,
+    pkg=Path(__file__).parent,
     app=str(__package__),
     org="tremeschin",
+    url="com",
 )
 """A main SmartDirs instance so you can get static/base directories"""

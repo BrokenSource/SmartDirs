@@ -1,7 +1,8 @@
+import contextlib
 import tempfile
 from abc import ABC, abstractmethod
-from collections.abc import Callable
 from pathlib import Path
+from typing import Generator, Optional
 
 from pydantic import BaseModel, Field, model_serializer
 
@@ -11,9 +12,16 @@ class UserOptions(BaseModel):
 
 
 class SmartDirsBase(BaseModel, ABC):
-    """Nice platform directories and utilities class"""
+    """
+    Nice platform directories and utilities class
 
-    package: Path
+    - **Base**: Hidden user directories
+    - **App**: Application directories under
+    - **User**: Visible user-facing directories
+    - **Site**: System directories
+    """
+
+    pkg: Path
     """Path to the package root"""
 
     app: str = Field()
@@ -22,10 +30,13 @@ class SmartDirsBase(BaseModel, ABC):
     org: str = Field()
     """Author or vendor name for directories"""
 
+    url: Optional[str] = None
+    """Reverse domain name"""
+
     @property
     def repository(self) -> Path:
         """Path to the repository root"""
-        return self.package.parent
+        return self.pkg.parent
 
     @property
     def tempdir(self) -> Path:
@@ -36,7 +47,7 @@ class SmartDirsBase(BaseModel, ABC):
     @property
     def resources(self) -> Path:
         """Path to the resources directory"""
-        return self.package.joinpath("resources")
+        return self.pkg.joinpath("resources")
 
     # ------------------------------------------------------------------------ #
 
@@ -103,7 +114,9 @@ class SmartDirsBase(BaseModel, ABC):
     def app_subdir(self) -> Path:
         ...
 
-    @abstractmethod
+    def app_cache(self) -> Path:
+        return self.base_cache().joinpath(self.app_subdir())
+
     def app_runtime(self) -> Path:
         """
         Live application data that resets on reboot, similar to /tmp but only user-writable.
@@ -114,6 +127,14 @@ class SmartDirsBase(BaseModel, ABC):
         | Windows   | `None`                                     | `None`           |
         | Workspace | Same for host platform                     | dynamic          |
         """
+        return self.base_runtime().joinpath(self.app_subdir())
+
+    @contextlib.contextmanager
+    def app_tempdir(self) -> Generator[Path, None, None]:
+        with tempfile.TemporaryDirectory(
+            prefix=self.app,
+        ) as directory:
+            yield Path(directory)
 
     # ------------------------------------------------------------------------ #
 
@@ -121,21 +142,21 @@ class SmartDirsBase(BaseModel, ABC):
 
     # ------------------------------------------------------------------------ #
 
-    @model_serializer(mode="wrap")
-    def serialize(self, handler):
-        data = handler(self)
-
-        def export(*methods: Callable):
-            return {get.__name__: get() for get in methods} # type: ignore
-
-        data.update(export(
+    @abstractmethod
+    def export(self) -> dict[str, Path]:
+        return {get.__name__: get() for get in ((
             self.base_home,
             self.base_cache,
             self.base_config,
             self.base_data,
             self.base_runtime,
             self.app_subdir,
+            self.app_cache,
             self.app_runtime,
-        ))
+        ))}
 
+    @model_serializer(mode="wrap")
+    def serialize(self, handler):
+        data = handler(self)
+        data.update(self.export)
         return data
