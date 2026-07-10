@@ -1,7 +1,7 @@
 [project]
 name        = "smartdirs"
 description = "📂 System Directories and Utilities"
-version     = "0.1.0"
+version     = "0.0.2"
 license     = "MIT"
 readme      = "readme.md"
 requires-python = ">=3.10"
