@@ -11,7 +11,11 @@
 
 ## 📦 Description
 
-A modular platform directories package
+A modular platform directories package with conveniences:
+
+- **Resources**: Get your package root or resources directories too
+- **Re-exports** `pathlib.Path` for a single import line (wow!)
+- **Workspace**: Easily set a root for base, user, site directories
 
 ## 📦 Usage
 
