@@ -2,7 +2,14 @@ import os
 import sys
 from pathlib import Path
 
-if os.name == "posix":
+WORKSPACE: str = "WORKSPACE"
+"""Variable for setting a common directories root"""
+
+# Global dispatch branch on flavors
+if os.environ.get(WORKSPACE, None):
+    from smartdirs.at.workspace import SmartDirsWorkspace as SmartDirs
+
+elif os.name == "posix":
     from smartdirs.at.unix import SmartDirsUnix as SmartDirs
 
 elif sys.platform.startswith("darwin"):
