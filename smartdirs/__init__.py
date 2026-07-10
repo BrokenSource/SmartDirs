@@ -5,6 +5,7 @@ from pathlib import Path
 WORKSPACE: str = "WORKSPACE"
 """Variable for setting a common directories root"""
 
+# Warn: Use base class for isinstance() checks!
 from smartdirs.base import SmartDirsBase
 from smartdirs.flavor.macos import SmartDirsMacOS
 from smartdirs.flavor.unix import SmartDirsUnix
@@ -12,7 +13,7 @@ from smartdirs.flavor.windows import SmartDirsWindows
 from smartdirs.flavor.workspace import SmartDirsWorkspace
 
 # Global dispatch branch on flavors
-if os.environ.get(WORKSPACE, None):
+if (WORKSPACE in os.environ):
     SmartDirs = SmartDirsWorkspace
 
 elif os.name == "posix":
@@ -31,7 +32,7 @@ else:
 
 dirs = SmartDirs(
     package=Path(__file__).parent,
-    name=str(__package__),
-    vendor="brokensource",
+    app=str(__package__),
+    org="tremeschin",
 )
 """A main SmartDirs instance so you can get static/base directories"""
