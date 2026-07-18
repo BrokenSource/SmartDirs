@@ -14,7 +14,7 @@ class SmartDirsWorkspace(SmartDirsBase):
 
     # ------------------------------------------------------------------------ #
 
-    def base_home(self) -> Path:
+    def user_home(self) -> Path:
         return self.root
 
     def base_cache(self) -> Path:

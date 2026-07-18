@@ -7,23 +7,24 @@ WORKSPACE: str = "WORKSPACE"
 
 # Warn: Use base class for isinstance() checks!
 from smartdirs.base import SmartDirsBase
+
+# Global dispatch branch on flavors
 from smartdirs.flavor.darwin import SmartDirsDarwin
 from smartdirs.flavor.unix import SmartDirsUnix
 from smartdirs.flavor.windows import SmartDirsWindows
 from smartdirs.flavor.workspace import SmartDirsWorkspace
 
-# Global dispatch branch on flavors
 if (WORKSPACE in os.environ):
     SmartDirs = SmartDirsWorkspace
 
 elif os.name == "posix":
     SmartDirs = SmartDirsUnix
 
-elif sys.platform.startswith("darwin"):
-    SmartDirs = SmartDirsDarwin
-
 elif sys.platform.startswith("win"):
     SmartDirs = SmartDirsWindows
+
+elif sys.platform.startswith("darwin"):
+    SmartDirs = SmartDirsDarwin
 
 else:
     raise NotImplementedError((

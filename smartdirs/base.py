@@ -4,19 +4,15 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Generator, Optional
 
-from pydantic import BaseModel, Field, model_serializer
-
-
-class UserOptions(BaseModel):
-    ...
+from pydantic import BaseModel, Field, computed_field
 
 
 class SmartDirsBase(BaseModel, ABC):
     """
     Nice platform directories and utilities class
 
+    - **App**: Application directories
     - **Base**: Hidden user directories
-    - **App**: Application directories under
     - **User**: Visible user-facing directories
     - **Site**: System directories
     """
@@ -34,25 +30,29 @@ class SmartDirsBase(BaseModel, ABC):
     """Reverse domain name"""
 
     @property
+    @computed_field
     def repository(self) -> Path:
         """Path to the repository root"""
         return self.pkg.parent
 
     @property
+    @computed_field
     def tempdir(self) -> Path:
         return Path(tempfile.gettempdir())
 
     # ------------------------------------------------------------------------ #
 
     @property
+    @computed_field
     def resources(self) -> Path:
         """Path to the resources directory"""
         return self.pkg.joinpath("resources")
 
     # ------------------------------------------------------------------------ #
 
+    @property
     @abstractmethod
-    def base_home(self) -> Path:
+    def user_home(self) -> Path:
         """
         | Where     | Value                | Example            |
         | :-------- | :------------------- | :----------------- |
@@ -62,6 +62,7 @@ class SmartDirsBase(BaseModel, ABC):
         | Workspace | `$WORKSPACE`         | `/workspace`       |
         """
 
+    @property
     @abstractmethod
     def base_cache(self) -> Path:
         """
@@ -73,6 +74,7 @@ class SmartDirsBase(BaseModel, ABC):
         | Workspace | `$WORKSPACE/base/cache`                | `/workspace/base/cache`            |
         """
 
+    @property
     @abstractmethod
     def base_config(self) -> Path:
         """
@@ -84,6 +86,7 @@ class SmartDirsBase(BaseModel, ABC):
         | Workspace | `$WORKSPACE/base/cache`                | `/workspace/base/cache`            |
         """
 
+    @property
     @abstractmethod
     def base_data(self) -> Path:
         """
@@ -96,6 +99,7 @@ class SmartDirsBase(BaseModel, ABC):
         | Workspace | `$WORKSPACE/base/data`                   | `/workspace/base/data`                     |
         """
 
+    @property
     @abstractmethod
     def base_runtime(self) -> Path:
         """
@@ -110,13 +114,18 @@ class SmartDirsBase(BaseModel, ABC):
 
     # ------------------------------------------------------------------------ #
 
+    @property
     @abstractmethod
     def app_subdir(self) -> Path:
         ...
 
+    @property
+    @computed_field
     def app_cache(self) -> Path:
-        return self.base_cache().joinpath(self.app_subdir())
+        return self.base_cache.joinpath(self.app_subdir)
 
+    @property
+    @computed_field
     def app_runtime(self) -> Path:
         """
         Live application data that resets on reboot, similar to /tmp but only user-writable.
@@ -127,7 +136,7 @@ class SmartDirsBase(BaseModel, ABC):
         | Windows   | `None`                                     | `None`           |
         | Workspace | Same for host platform                     | dynamic          |
         """
-        return self.base_runtime().joinpath(self.app_subdir())
+        return self.base_runtime.joinpath(self.app_subdir)
 
     @contextlib.contextmanager
     def app_tempdir(self) -> Generator[Path, None, None]:
@@ -137,26 +146,3 @@ class SmartDirsBase(BaseModel, ABC):
             yield Path(directory)
 
     # ------------------------------------------------------------------------ #
-
-    user: UserOptions = UserOptions()
-
-    # ------------------------------------------------------------------------ #
-
-    @abstractmethod
-    def export(self) -> dict[str, Path]:
-        return {get.__name__: get() for get in ((
-            self.base_home,
-            self.base_cache,
-            self.base_config,
-            self.base_data,
-            self.base_runtime,
-            self.app_subdir,
-            self.app_cache,
-            self.app_runtime,
-        ))}
-
-    @model_serializer(mode="wrap")
-    def serialize(self, handler):
-        data = handler(self)
-        data.update(self.export)
-        return data

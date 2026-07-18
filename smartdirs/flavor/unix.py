@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from pydantic import model_serializer
+from pydantic import computed_field
 
 from smartdirs.base import SmartDirsBase
 
@@ -10,27 +10,32 @@ class SmartDirsUnix(SmartDirsBase):
 
     # ------------------------------------------------------------------------ #
 
-    def base_home(self) -> Path:
+    @computed_field
+    def user_home(self) -> Path:
         return Path.home()
 
+    @computed_field
     def base_cache(self) -> Path:
         return Path(os.environ.get(
             key="XDG_CACHE_HOME",
             default=Path.home().joinpath(".cache"),
         ))
 
+    @computed_field
     def base_config(self) -> Path:
         return Path(os.environ.get(
             key="XDG_CONFIG_HOME",
             default=Path.home().joinpath(".config"),
         ))
 
+    @computed_field
     def base_data(self) -> Path:
         return Path(os.environ.get(
             key="XDG_DATA_HOME",
             default=Path.home().joinpath(".local", "share"),
         ))
 
+    @computed_field
     def base_runtime(self) -> Path:
         return Path(os.environ.get(
             key="XDG_RUNTIME_DIR",
@@ -39,5 +44,6 @@ class SmartDirsUnix(SmartDirsBase):
 
     # ------------------------------------------------------------------------ #
 
+    @computed_field
     def app_subdir(self) -> Path:
         return Path(self.app)
