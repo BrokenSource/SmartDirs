@@ -13,9 +13,10 @@
 
 A modular platform directories package with conveniences:
 
-- **Resources**: Get your package root or resources directories too
-- **Workspace**: Easily set a root for base, user, site directories
-- **Exports** `pathlib.Path` for a single import line (wow!)
+- **Workspace**: Set a common root for all directories to isolate or avoid pollution
+- **Resources**: Use the package root to tell resources directly, avoiding importlib
+- **Pydantic**: Get a dict or json for all directories, simple cli for stdout print
+- **Exports** `pathlib.Path` for a single import line in your package init 😉
 
 ## 📦 Usage
 

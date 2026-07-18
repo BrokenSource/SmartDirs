@@ -9,6 +9,9 @@ dependencies = [
     "pydantic",
 ]
 
+[project.scripts]
+smartdirs = "smartdirs.__main__:main"
+
 [project.urls]
 GitHub = "https://github.com/BrokenSource/SmartDirs"
 
