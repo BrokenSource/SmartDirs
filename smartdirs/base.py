@@ -29,21 +29,21 @@ class SmartDirsBase(BaseModel, ABC):
     url: Optional[str] = None
     """Reverse domain name"""
 
-    @property
     @computed_field
+    @property
     def repository(self) -> Path:
         """Path to the repository root"""
         return self.pkg.parent
 
-    @property
     @computed_field
+    @property
     def tempdir(self) -> Path:
         return Path(tempfile.gettempdir())
 
     # ------------------------------------------------------------------------ #
 
-    @property
     @computed_field
+    @property
     def resources(self) -> Path:
         """Path to the resources directory"""
         return self.pkg.joinpath("resources")
@@ -119,13 +119,13 @@ class SmartDirsBase(BaseModel, ABC):
     def app_subdir(self) -> Path:
         ...
 
-    @property
     @computed_field
+    @property
     def app_cache(self) -> Path:
         return self.base_cache.joinpath(self.app_subdir)
 
-    @property
     @computed_field
+    @property
     def app_runtime(self) -> Path:
         """
         Live application data that resets on reboot, similar to /tmp but only user-writable.

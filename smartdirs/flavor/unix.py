@@ -11,10 +11,12 @@ class SmartDirsUnix(SmartDirsBase):
     # ------------------------------------------------------------------------ #
 
     @computed_field
+    @property
     def user_home(self) -> Path:
         return Path.home()
 
     @computed_field
+    @property
     def base_cache(self) -> Path:
         return Path(os.environ.get(
             key="XDG_CACHE_HOME",
@@ -22,6 +24,7 @@ class SmartDirsUnix(SmartDirsBase):
         ))
 
     @computed_field
+    @property
     def base_config(self) -> Path:
         return Path(os.environ.get(
             key="XDG_CONFIG_HOME",
@@ -29,6 +32,7 @@ class SmartDirsUnix(SmartDirsBase):
         ))
 
     @computed_field
+    @property
     def base_data(self) -> Path:
         return Path(os.environ.get(
             key="XDG_DATA_HOME",
@@ -36,6 +40,7 @@ class SmartDirsUnix(SmartDirsBase):
         ))
 
     @computed_field
+    @property
     def base_runtime(self) -> Path:
         return Path(os.environ.get(
             key="XDG_RUNTIME_DIR",
@@ -45,5 +50,6 @@ class SmartDirsUnix(SmartDirsBase):
     # ------------------------------------------------------------------------ #
 
     @computed_field
+    @property
     def app_subdir(self) -> Path:
         return Path(self.app)
