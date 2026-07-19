@@ -2,6 +2,11 @@ import os
 import sys
 from pathlib import Path
 
+__about__   = "📂 System Directories and Utilities"
+__package__ = "smartdirs"
+__version__ = "0.0.2"
+__license__ = "MIT"
+
 WORKSPACE: str = "WORKSPACE"
 """Variable for setting a common directories root"""
 

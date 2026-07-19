@@ -6,8 +6,9 @@ from smartdirs import SmartDirs
 
 from . import APP, ORG, PKG, URL
 
-BASE: list[str] = [
-    sys.executable, "-m", "smartdirs",
+CMD: list[str] = [
+    sys.executable,
+    "-m", "smartdirs",
     "--pkg", PKG,
     "--app", APP,
     "--org", ORG,
@@ -21,14 +22,14 @@ dirs = SmartDirs(
     url=URL,
 )
 
-# Note: passthrough json string for strip and compare strings
+# Note: pass-through json for strip and compare strings
 
 def test_stdout():
-    A = json.loads(subprocess.check_output(BASE).decode())
+    A = json.loads(subprocess.check_output(CMD).decode())
     B = json.loads(dirs.model_dump_json())
     assert A == B
 
 def test_schema():
-    A = json.loads(subprocess.check_output(BASE + ["--schema"]).decode())
+    A = json.loads(subprocess.check_output(CMD + ["--schema"]).decode())
     B = dirs.model_json_schema(mode="serialization")
     assert A == B
