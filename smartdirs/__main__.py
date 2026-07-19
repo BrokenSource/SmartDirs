@@ -1,4 +1,5 @@
 import argparse
+import json
 from pathlib import Path
 
 from smartdirs import SmartDirs
@@ -48,7 +49,12 @@ def main() -> None:
     )
 
     if args.schema:
-        print(dirs.model_json_schema())
+        print(json.dumps(
+            dirs.model_json_schema(mode="serialization"),
+            separators=(',', ':'),
+            ensure_ascii=False,
+            indent=None,
+        ))
     else:
         print(dirs.model_dump_json())
 
