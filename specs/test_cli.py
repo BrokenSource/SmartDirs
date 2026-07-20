@@ -9,7 +9,7 @@ from . import APP, ORG, PKG, URL
 CMD: list[str] = [
     sys.executable,
     "-m", "smartdirs",
-    "--pkg", PKG,
+    "--pkg", str(PKG),
     "--app", APP,
     "--org", ORG,
     "--url", URL,
