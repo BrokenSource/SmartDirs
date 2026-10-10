@@ -1,3 +1,10 @@
+"""
+General references:
+- https://docs.rs/directories/6.0.0/directories/index.html
+- https://docs.rs/directories/6.0.0/directories/struct.ProjectDirs.html
+- https://docs.rs/directories/6.0.0/directories/struct.UserDirs.html
+- https://docs.rs/directories/6.0.0/directories/struct.BaseDirs.html
+"""
 import contextlib
 import tempfile
 from abc import ABC, abstractmethod
@@ -123,6 +130,11 @@ class SmartDirsBase(BaseModel, ABC):
     @property
     def app_cache(self) -> Path:
         return self.base_cache.joinpath(self.app_subdir)
+
+    @computed_field
+    @property
+    def app_data(self) -> Path:
+        return self.base_data.joinpath(self.app_subdir)
 
     @computed_field
     @property
