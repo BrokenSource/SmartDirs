@@ -8,8 +8,8 @@ General references:
 import contextlib
 import tempfile
 from abc import ABC, abstractmethod
+from collections.abc import Generator
 from pathlib import Path
-from typing import Generator, Optional
 
 from pydantic import BaseModel, Field, computed_field
 
@@ -33,7 +33,7 @@ class SmartDirsBase(BaseModel, ABC):
     org: str = Field()
     """Author or vendor name for directories"""
 
-    url: Optional[str] = None
+    url: str | None = None
     """Reverse domain name"""
 
     @computed_field

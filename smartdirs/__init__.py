@@ -32,9 +32,9 @@ elif sys.platform.startswith("darwin"):
     SmartDirs = SmartDirsDarwin
 
 else:
-    raise NotImplementedError((
+    raise NotImplementedError(
         "Unknown platform for exporting a SmartDirs class"
-    ))
+    )
 
 dirs = SmartDirs(
     pkg=Path(__file__).parent,
